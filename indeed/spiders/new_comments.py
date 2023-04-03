@@ -1,26 +1,29 @@
 import scrapy
 from urllib.parse import urlencode
-from pprint import pprint
+from scrapy_playwright.page import PageMethod
 import w3lib
 
 
 class CommentsSpider(scrapy.Spider):
-    name = 'comments'
+    name = 'new_comments'
     allowed_domains = ['www.indeed.com']
     start_urls = [
         'https://www.indeed.com/cmp/Schneider/reviews',
     ]
 
     def get_scrape_review_page(self, page=0):
-        parameters = {"start": page * 20}
+        parameters = {'fcountry':'ALL', 'start': page * 20}
         return self.start_urls[0] + '?' + urlencode(parameters)
 
     def start_requests(self):
-        for page in range(0, 10):
+        for page in range(0, 190):
             yield scrapy.Request(
                 url=self.get_scrape_review_page(page=page), 
                 meta={
-                    'playwright': True
+                    'playwright': True,
+                    'playwright_page_method': [
+                        PageMethod('wait_for_selector', '.cmp-ReviewsList')
+                    ]
                 },
             )
 
