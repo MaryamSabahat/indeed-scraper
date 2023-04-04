@@ -1,4 +1,4 @@
-from ..db.connection import DBConnector
+from db.connection import DBConnector
 
 
 class IndeedPipeline:

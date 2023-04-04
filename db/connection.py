@@ -1,5 +1,5 @@
 import mysql.connector
-from datetime import datetime, timedelta
+from datetime import datetime
 from config import *
 
 class Singleton:
@@ -33,38 +33,29 @@ class DBConnector(object):
             user=USER,
             password=PASSWORD,
             host=HOST,
-            database=DATABASE
         )
 
         self.curr = self.conn.cursor()
 
-    def store_db(self, item):
-        self.curr.execute(
-            "select * from  where source_id = %s and website = %s", 
-            (item['source_id'], item['website'])
-        )
-        result = self.curr.fetchone()
-
-        self.curr.execute('INSERT INTO vacancies.indeed_job '\
-                        ' (source_id, position, company, location, salary, schedule, education, work_experience, phone, email, short_description, full_description, link, website, logo, created_at)'\
-                        ' VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',(
-                            is_not_null(item['source_id']),
-                            is_not_null(item['position']),
+    def store_db(self, item: dict):        
+        self.curr.execute('INSERT INTO vacancies.reviews '\
+                        ' (company, reviews_amount, work_life_rate, pay_benefits_rate, security_adv_rate, management_rate, culture_rate, reviewer_rate, caption, reviewer_position, reviewer_location, date_reviewed, text, date_added)'\
+                        ' VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',(
                             is_not_null(item['company']),
-                            is_not_null(item['location']),
-                            is_not_null(item['salary']),
-                            is_not_null(item['schedule']),
-                            is_not_null(item['education']),
-                            is_not_null(item['work_experience']),
-                            is_not_null(item['phone']),
-                            is_not_null(item['email']),
-                            # is_not_null(item['shift']),
-                            is_not_null(item['short_description'][0:255]),
-                            is_not_null(item['full_description'][0:1000]),
-                            is_not_null(item['link']),
-                            is_not_null(item['website']),
-                            is_not_null(item['logo_url']),
-                            datetime.now()))
+                            is_not_null(item['reviews_amount']),
+                            is_not_null(item['work_life_rate']),
+                            is_not_null(item['pay_benefits_rate']),
+                            is_not_null(item['security_adv_rate']),
+                            is_not_null(item['management_rate']),
+                            is_not_null(item['culture_rate']),
+                            is_not_null(item['reviewer_rate']),
+                            is_not_null(item['caption']),
+                            is_not_null(item['reviewer_position']),
+                            is_not_null(item['reviewer_location']),
+                            is_not_null(item['date_reviewed']),
+                            is_not_null(item['text']),
+                            datetime.now())
+        )
     
         self.conn.commit()
 
@@ -74,7 +65,7 @@ class DBConnector(object):
         )
 
         companies = self.curr.fetchall()
-        companies = list(map(lambda s: s[0],companies))
+        companies = map(lambda s: s[0],companies)
         companies = list(filter(lambda s: s != '',companies))
 
         return companies
