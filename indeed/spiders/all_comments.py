@@ -71,11 +71,14 @@ class CommentsSpider(scrapy.Spider):
             review_count = review_count.replace(',', '')
 
         for review in reviews_list:
-            rating = review.css('[itemprop="reviewRating"] > button::text').get()
-            caption = w3lib.html.remove_tags(review.css('[data-testid="title"]').get())
-            text = w3lib.html.remove_tags(review.css('[data-tn-component="reviewDescription"] > [itemprop="reviewBody"]').get())
+            try:
+                rating = review.css('[itemprop="reviewRating"] > button::text').get()
+                caption = w3lib.html.remove_tags(review.css('[data-testid="title"]').get())
+                text = w3lib.html.remove_tags(review.css('[data-tn-component="reviewDescription"] > [itemprop="reviewBody"]').get())
 
-            author_details = list(map(lambda s: s.strip(), w3lib.html.remove_tags(review.css('[itemprop="author"]').get()).split(' - ')))
+                author_details = list(map(lambda s: s.strip(), w3lib.html.remove_tags(review.css('[itemprop="author"]').get()).split(' - ')))
+            except:
+                continue
             
             yield {
                 'company': response.meta['company'],
