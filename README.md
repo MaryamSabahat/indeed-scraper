@@ -15,7 +15,7 @@ pip install -r requirements.txt
 ```
 
 Berofe runnig need to fell up <code>.env</code> file.<br>
-<code>.env.dist</code> file as excemple.
+<code>.env.dist</code> file as exemple.
 
 # Run/Collect
 ## Collect all datas
