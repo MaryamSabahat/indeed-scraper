@@ -14,6 +14,9 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 playwright install
+
+chmod 775 collect_all.sh
+chmod 775 collect_new.sh
 ```
 
 Berofe runnig need to fell up <code>.env</code> file.<br>
