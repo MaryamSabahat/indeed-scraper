@@ -12,6 +12,8 @@ python3.11 -m venv venv
 source venv/bin/activate
 
 pip install -r requirements.txt
+
+playwright install
 ```
 
 Berofe runnig need to fell up <code>.env</code> file.<br>
